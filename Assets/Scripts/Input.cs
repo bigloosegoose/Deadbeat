@@ -58,10 +58,10 @@ public class Input : MonoBehaviour
 
     void Look()
     {
-        Vector2 look = lookRef.action.ReadValue<Vector2>();
+        Vector2 look = lookRef.action.ReadValue<Vector2>() * lookSensitivity;
 
         transform.Rotate(0f, look.x, 0f); //yaw say no ahah
-        pitch = Mathf.Clamp(pitch - look.y, -maxLookAngle, maxLookAngle);
+        pitch = Mathf.Clamp(pitch - look.y, -30f, maxLookAngle);
         cameraHolder.localRotation = Quaternion.Euler(pitch, 0f, 0f); //currently camera only
 
     }
