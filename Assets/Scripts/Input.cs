@@ -24,6 +24,10 @@ public class Input : MonoBehaviour
     [SerializeField] private float lookSensitivity = 0.2f;
     [SerializeField] private float maxLookAngle = 85f;
 
+    [Header("Animation")]
+    [SerializeField] private Animator animator;
+    static readonly int speedHash = Animator.StringToHash("speed");
+
     private CharacterController cc;
     float pitch;
     float verticalVelocity;
@@ -79,6 +83,8 @@ public class Input : MonoBehaviour
         verticalVelocity += gravity * Time.deltaTime;
         cc.Move((horizontal + Vector3.up * verticalVelocity) * Time.deltaTime);
 
+        float planarSpeed = new Vector3(horizontal.x, 0f, horizontal.z).magnitude;
+        animator.SetFloat("Speed", planarSpeed, 0.1f, Time.deltaTime);
     }
 
 }
