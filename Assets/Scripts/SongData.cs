@@ -7,4 +7,5 @@ public class SongData : ScriptableObject
     public float footstepBpm;
     public float firstBeatOffset;
     public AudioClip[] footstepSounds;
+    public AudioClip songFile;
 }
