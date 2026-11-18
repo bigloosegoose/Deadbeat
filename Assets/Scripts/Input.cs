@@ -11,6 +11,7 @@ public class Input : MonoBehaviour
     [SerializeField] InputActionReference lookRef;
     [SerializeField] InputActionReference jumpRef;
     [SerializeField] InputActionReference sprintRef;
+    [SerializeField] InputActionReference TargetLockRef;
     
 
     [Header("Movement")]
@@ -28,6 +29,8 @@ public class Input : MonoBehaviour
     [SerializeField] private Animator animator;
     static readonly int speedHash = Animator.StringToHash("speed");
 
+
+
     private CharacterController cc;
     float pitch;
     float verticalVelocity;
@@ -43,6 +46,7 @@ public class Input : MonoBehaviour
         lookRef.action.Enable();
         jumpRef.action.Enable();
         sprintRef.action.Enable();
+        TargetLockRef.action.Enable();
         Cursor.lockState = CursorLockMode.Locked;
     }
 
@@ -52,12 +56,18 @@ public class Input : MonoBehaviour
         lookRef.action.Disable();
         jumpRef.action.Disable();
         sprintRef.action.Disable();
+        TargetLockRef.action.Disable();
     }
 
     void Update()
     {
+
+        if (Keyboard.current == null) return;
+
         Look();
         Move();
+
+        if (Keyboard.current.eKey.wasPressedThisFrame) TargetLock();
     }
 
     void Look()
@@ -85,6 +95,21 @@ public class Input : MonoBehaviour
 
         float planarSpeed = new Vector3(horizontal.x, 0f, horizontal.z).magnitude;
         animator.SetFloat("Speed", planarSpeed, 0.1f, Time.deltaTime);
+    }
+
+    void TargetLock()
+    {
+        Debug.Log("pressed E");
+        Collider[] hits = Physics.OverlapSphere(transform.position, 5f);
+
+        foreach (Collider hit in hits)
+        {
+            if (hit.CompareTag("Enemy"))
+            {
+                Debug.Log("FOUND ENEMY");
+                hit.transform.localScale = new Vector3(1, 1, 1);
+            }
+        }
     }
 
 }
